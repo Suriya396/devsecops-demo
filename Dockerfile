@@ -5,16 +5,15 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 
-# Copy dependency files first
+# Update alpine packages
+RUN apk update && apk upgrade
+
 COPY package*.json ./
 
-# Install dependencies
 RUN npm ci
 
-# Copy application source code
 COPY . .
 
-# Build application
 RUN npm run build
 
 # ==========================================
@@ -22,17 +21,15 @@ RUN npm run build
 # ==========================================
 FROM nginx:1.29-alpine
 
-# Remove default nginx static files
+# Update alpine packages
+RUN apk update && apk upgrade
+
+# Remove default nginx files
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy build files from build stage
+# Copy build files
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Optional custom nginx config
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose nginx port
 EXPOSE 80
 
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
