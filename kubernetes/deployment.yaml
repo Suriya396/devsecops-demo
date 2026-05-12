@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: devsecops-demo
-        image: ghcr.io/suriya396/devsecops-demo:latest
+        image: ghcr.io/suriya396/devsecops-demo:943f01466f7a42042e406a64f7962725cf72a849
         ports:
         - containerPort: 80
